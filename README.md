@@ -20,24 +20,37 @@ public class SudokuSolver {
                 {0, 0, 7, 0, 4, 0, 2, 0, 3}
         };
 
-        if (solveBoard(board)) {
+        if (solveBoard(board) && isBoardFullyFilled(board)) {
             System.out.println("Solved successfully!");
         } else {
-            System.out.println("Unsolvable board!");
+            System.out.println("Unsolvable board or incomplete solution!");
         }
 
         printBoard(board);
+
     }
 
     private static void printBoard(int[][] board) {
         for (int row = 0; row < GRID_SIZE; row++) {
+            // Add a horizontal grid line after every 3 rows, except the first row
+            if (row % 3 == 0 && row != 0) {
+                System.out.println("------+-------+------");
+            }
+
             for (int column = 0; column < GRID_SIZE; column++) {
-                System.out.print(board[row][column] + " ");
+                // Add a vertical grid line after every 3 columns, except the first column
+                if (column % 3 == 0 && column != 0) {
+                    System.out.print("| ");
+                }
+
+                // Print a dot for empty cells (0), otherwise print the number
+                System.out.print(board[row][column] == 0 ? ". " : board[row][column] + " ");
             }
             System.out.println();
         }
     }
 
+    //Checks if a number exists in a specific row by iterating through each cell in that row.
     private static boolean isNumberInRow(int[][] board, int number, int row) {
         for (int i = 0; i < GRID_SIZE; i++) {
             if (board[row][i] == number) {
@@ -124,6 +137,17 @@ public class SudokuSolver {
         }
 
         return true;
+    }
+
+    private static boolean isBoardFullyFilled(int[][] board) {
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                if (board[row][col] == 0) {
+                    return false; // Found an empty cell
+                }
+            }
+        }
+        return true; // No empty cells, board is fully filled
     }
 
     private static void findEmptySpots(int[][] board, Deque<int[]> deque) {
